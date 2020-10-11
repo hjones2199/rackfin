@@ -1,0 +1,9 @@
+#+TITLE: Rackfin ReadMe
+#+AUTHOR: hjones2199
+
+* Info
+Provides racket bindings to the finnhub API. Project is currently just a single file, without
+the necessary structure or stability to place in the racket repositories. A valid API key from
+[[https://finnhub.io][Finnhub]] is needed to make use of this library. I'm currently only implementing the free tier API
+functions.
+
