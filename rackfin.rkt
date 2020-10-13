@@ -62,28 +62,36 @@
     (define start
       (cond
         [(null? start-date)
-         (struct-copy date (current-date) (month (- (date-month (current-date)) 1)))]
-        [else start-date]))
+         (date->string
+          (struct-copy date (current-date)
+                       (month (- (date-month (current-date)) 1))))]
+        [(string? start-date) start-date]
+        [else (date->string start-date)]))
     (define end
       (cond
         [(null? end-date) (current-date)]
-        [else end-date]))
+        [(string? end-date) end-date]
+        [else (date->string end-date)]))
     (finnhub-get "company-news?symbol=~a&from=~a&to=~a"
-                 ticker (date->string start) (date->string end)))
+                 ticker start end))
 
   (define (stock-splits ticker (start-date null) (end-date null))
     (date-display-format 'iso-8601)
     (define start
       (cond
         [(null? start-date)
-         (struct-copy date (current-date) (month (- (date-month (current-date)) 1)))]
-        [else start-date]))
+         (date->string
+          (struct-copy date (current-date)
+                       (month (- (date-month (current-date)) 1))))]
+        [(string? start-date) start-date]
+        [else (date->string start-date)]))
     (define end
       (cond
         [(null? end-date) (current-date)]
-        [else end-date]))
+        [(string? end-date) end-date]
+        [else (date->string end-date)]))
     (finnhub-get "stock/split?symbol=~a&from=~a&to=~a"
-                 ticker (date->string start) (date->string end)))
+                 ticker start end))
 
   (define (stock-sentiment ticker)
     (finnhub-get "news-sentiment?symbol=~a" ticker))
@@ -109,17 +117,20 @@
 
   (define (ipo-calendar (start-date (current-date)) (end-date null))
     (date-display-format 'iso-8601)
-    (cond
-      [(null? end-date)
-       (define end
-         (struct-copy date start-date (day 1) (month (+ (date-month start-date) 1))))
-       (finnhub-get "calendar/ipo?from=~a&to=~a"
-                    (date->string start-date)
-                    (date->string end))]
-      [else
-       (finnhub-get "calendar/ipo?from=~a&to=~a"
-                    (date->string start-date)
-                    (date->string end-date))])))
+    (define start
+      (cond
+        [(null? start-date)
+         (date->string (current-date))]
+        [(string? start-date) start-date]
+        [else (date->string start-date)]))
+    (define end
+      (cond
+        [(null? end-date)
+         (struct-copy date (current-date)
+                      (month (+ (date-month (current-date)) 1)))]
+        [(string? end-date) end-date]
+        [else (date->string end-date)]))
+    (finnhub-get "calendar/ipo?from=~a&to=~a" start end)))
 
 
 (module+ etf
