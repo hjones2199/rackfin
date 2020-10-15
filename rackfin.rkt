@@ -140,6 +140,7 @@
            etf-industry
            etf-country
            index-constituents)
+
   (define (etf-profile ticker)
     (finnhub-get "etf/profile?symbol=~a" ticker))
 
@@ -154,3 +155,14 @@
 
   (define (index-constituents ticker)
     (finnhub-get "index/constituents?symbol=^~a" ticker)))
+
+(module+ economic
+  (require (submod ".." finnhub-common))
+  (provide econ-countries
+           econ-calendar)
+
+  (define (econ-countries)
+    (finnhub-get "country?"))
+
+  (define (econ-calendar)
+    (finnhub-get "calendar/economic?")))
