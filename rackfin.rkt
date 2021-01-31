@@ -156,6 +156,19 @@
   (define (index-constituents ticker)
     (finnhub-get "index/constituents?symbol=^~a" ticker)))
 
+(module+ crypto
+  (require (submod ".." finnhub-common))
+  (provide crypto-exchanges
+           crypto-symbols
+           crypto-candles)
+  (define (crypto-exchanges)
+    (finnhub-get "crypto/exchange"))
+  (define (crypto-symbols exchange)
+    (finnhub-get "crypto/symbol?exchange=~a" exchange))
+  (define (crypto-candles ticker exchange res from to)
+    (finnhub-get "crypto/candle?symbol=~a:~a&resolution=~a&from=~a&to=~a"
+                 exchange ticker res from to)))
+
 (module+ economic
   (require (submod ".." finnhub-common))
   (provide econ-countries
